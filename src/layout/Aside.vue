@@ -14,7 +14,7 @@
         <scroll class="aside-scroll" ref="scroll">
           <ul class="my-music-list-main">
             <li v-for="(item, index) in playList" :key="index" @click="enterMusicListDetail(index)">
-              <img :src="item.cover" alt="" />
+              <img :src="item.cover" alt="" width="25.6px" height="25.6px"/>
               <div class="my-music-list-main-name">{{ item.name }}</div>
             </li>
           </ul>

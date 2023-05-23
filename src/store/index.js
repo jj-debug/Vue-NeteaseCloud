@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     nickname:null,
-
+    disable: true,
     theme: 'light',
     user: null,
     uid: null,
@@ -21,6 +21,7 @@ export default new Vuex.Store({
     },
     /**保存用户信息 */
     addUser(state, obj) {
+      state.disable = false
       console.log('obj', obj)
       state.user = obj;
       state.uid = state.user.profile.userId;

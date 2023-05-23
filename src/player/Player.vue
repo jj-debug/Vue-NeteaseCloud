@@ -308,7 +308,7 @@ export default {
     /**音乐出现错误 */
     musicErr() {
       console.log("err");
-      this.$Toast.error("当前音频不可用");
+      // this.$Toast.error("当前音频不可用");
       this.currentIndex++;
     },
     /**对音乐播放结束进行监视 */

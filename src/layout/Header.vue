@@ -36,7 +36,7 @@
       <div class="right">
 
 
-        <el-dropdown :disabled="!haveCookie">
+        <el-dropdown :disabled="isCookie">
           <span class="el-dropdown-link">
             <b-avatar size="35px" class="avatar" :src="getAvatar" @click.native="handleAvatarClick" />
             <div class="nickname">
@@ -91,7 +91,7 @@ import { theme } from "mixin/global/theme.js";
 import { requestFullScreen, exitFullscreen } from "utils/window.js";
 import Login from "content/user/Login";
 import Search from "content/search";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   name: "LayoutHeader",
   mixins: [theme],
@@ -100,11 +100,18 @@ export default {
     return {
       isShow: false,
       isLogin: false,
+      isCookie: this.disable
+
     };
   },
   computed: {
     haveCookie() {
-      return localStorage.getItem('cookie');
+      if (localStorage.getItem('cookie')) {
+        return false
+      }else{
+        return true
+      }
+      // return localStorage.getItem('cookie');
     },
     headClass() {
       return [`${this.program + this.theme + "-header"}`, "dance-music-header"];
@@ -113,7 +120,7 @@ export default {
     //   return this.$store.getters.getAvatar;
     // },
     ...mapGetters(['getAvatar', 'getNickname']),
-    // ...mapState(['nickname']),
+    ...mapState(['disable']),
     
   },
   methods: {
@@ -134,7 +141,7 @@ export default {
       this.$store.commit("setTheme", "green");
     },
     handleAvatarClick() {
-      if (this.haveCookie) return
+      if (!this.disable) return
       this.$bus.$emit('erweima')
       this.isLogin = true;
     },

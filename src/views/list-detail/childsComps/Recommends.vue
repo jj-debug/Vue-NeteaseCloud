@@ -91,6 +91,7 @@ export default {
         _pushCommend(cookie, this.id, this.content).then((res) => {
           if (res.data.code == 200) {
             this.$Toast.success("评论成功");
+            this.$bus.$emit('newRecom')
           } else {
             this.$Toast.error("评论失败");
           }

@@ -17,7 +17,7 @@
         <!-- 歌曲评论 -->
         <div class="detail-container-recommend" v-show="isShow == 'recommend'">
           <recommends
-          ref="recommend"
+            ref="recommend"
             :recommends="recommends"
             :id="id"
           />
@@ -33,7 +33,7 @@
         </div>
         <music-list-live
           :subs="subs"
-          v-show="isShow == 'sub'"
+          v-if="false"
         />
       </div>
     </div>
@@ -48,7 +48,7 @@ import {
   _getRecommends,
   _getSub,
 } from "network/detail";
-
+import Vue from 'vue'
 import { theme } from "mixin/global/theme.js";
 import { playMusic } from "mixin/global/play-music";
 import BaseInfo from "./childsComps/baseInfo";
@@ -86,6 +86,9 @@ export default {
   created() {
     this.getDetailRequestDate();
   },
+  mounted() {
+    this.$bus.$on('newRecom', this.getRecommends)
+  },
   methods: {
     /**处理分页点击 */
     onPageChange() {
@@ -109,9 +112,16 @@ export default {
           break;
         case 1:
           this.isShow = "recommend";
+          /**获取歌单评论 */
+          this.getRecommends();
           break;
+
         case 2:
           this.isShow = "sub";
+          /**获取歌单收藏者 */
+          _getSub(this.id, 30).then((res) => {
+            this.subs = res.data.subscribers;
+          });
       }
     },
     init() {
@@ -148,18 +158,20 @@ export default {
           this.musicList.push(song);
         });
       }
-      /**获取歌单评论 */
-      this.getRecommends();
+      
 
-      /**获取歌单收藏者 */
-      _getSub(this.id, 30).then((res) => {
-        this.subs = res.data.subscribers;
-      });
     },
+
     /**获取歌单评论 */
     getRecommends() {
+      let vc = this;
+      console.log('getRecommends');
       _getRecommends(this.id, this.limit, this.offset).then((res) => {
         this.recommends = res.data.comments;
+        console.log(this.recommends);
+        console.log(this.recommendsCount);
+        // this.recommendsCount = this.recommend.length
+        console.log(this.recommends.length);
       });
     },
   },

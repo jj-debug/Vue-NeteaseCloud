@@ -1,6 +1,7 @@
 <template>
   <!-- <scroll class="scroll" ref="scroll" :disable-wheel="getIsWheel"> -->
-    <div :class="[`${program + 'artist-detail'}`]">
+    <div :class="[`${program + 'artist-detail'}`, 'test']" ref="roll">
+      <div ref="rolls"></div>
       <artist-baseinfo :artist="getArtist" :mv-count="getMvCount" />
       <b-menu
         :class="[`${program + 'artist-detail-menu'}`]"
@@ -23,11 +24,11 @@
       <artist-desc-detail
         :id="getArtistId"
         :name="artist.name"
-        v-show="isShow === 'desc'"
+        v-if="isShow === 'desc'"
       />
       <artist-simi
         :id="getArtistId"
-        v-show="isShow === 'simi'"
+        v-if="isShow === 'simi'"
       />
     </div>
   <!-- </scroll> -->
@@ -62,9 +63,24 @@ export default {
       mvList: [],
     };
   },
-  created() {
+  mounted() {
     this.artist = this.$route.query.artist;
-    this.initRequest();
+    console.log('this.$refs', this.$refs);
+    console.log('this.$refs.roll', this.$refs.roll);
+    console.log('this.$refs.rolls', this.$refs.rolls);
+    // console.log(document.querySelector('.test').scrollTop);
+    this.$refs.roll.addEventListener('scroll', () => {
+      
+        // 获取需要滚动的距离
+        var scrollTop = this.$refs.roll.scrollTop
+        // 变量windowHeight是可视区的高度
+        var windowHeight = this.$refs.roll.clientHeight
+        // 变量scrollHeight是滚动条的总高度
+        var scrollHeight = this.$refs.roll.scrollHeight
+        // 滚动条到底部的条件
+        console.log(scrollTop, windowHeight, scrollHeight);
+
+    })
   },
   computed: {
     /**获取歌曲初始数据 */
@@ -90,6 +106,7 @@ export default {
           break;
         case 1:
           this.isShow = "MV";
+          this.initRequest();
           break;
         case 2:
           this.isShow = "desc";
@@ -135,7 +152,7 @@ export default {
       if (this.$route.path.indexOf("artist-detail") > 0) {
         this.artist = this.$route.query.artist;
         this.reset();
-        this.initRequest();
+        // this.initRequest();
       }
     },
   },

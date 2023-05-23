@@ -1,5 +1,5 @@
 <template>
-  <div class="artist-album-detail">
+  <div class="artist-album-detail" ref="de">
     <div class="artist-album-detail-left">
       <img v-lazy="album.picUrl" />
     </div>
@@ -31,7 +31,8 @@ export default {
       lines: [true, true, true, false, false, true],
     };
   },
-  created() {
+  mounted() {
+    console.log(this.$refs.de.offsetTop);
     if (Object.keys(this.album).length) {
       this.initRequest();
     }
