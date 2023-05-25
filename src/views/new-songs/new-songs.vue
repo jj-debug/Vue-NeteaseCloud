@@ -42,10 +42,18 @@ export default {
       currentArea: 0,
       page: 1,
       musicList: [],
+      offset: 20,
+      allList: []
     };
   },
   created() {
     this.getTopSongs();
+  },
+  mounted() {
+    this.$bus.$on('newSongsScroll', () => {
+      this.getMoreSongsDetail()
+      this.offset += 20
+    })
   },
   computed: {},
   methods: {
@@ -56,11 +64,23 @@ export default {
     // handleRefresh() {
     //   this.$refs.scroll.refresh();
     // },
+    // 懒加载 jj-debug
+    getMoreSongsDetail() {
+      let list = this.allList.slice(this.offset, this.offset+20)
+      for (let i in list) {
+          _getSongsDetail(list[i].id).then((res) => {
+            let song = new songDetail(res.data.songs);
+            this.musicList.push(song);
+          });
+        }
+    },
     getTopSongs() {
       this.musicList = [];
       _getTopSongs(this.currentArea).then((res) => {
         let list = res.data.data;
+        this.allList = list
         for (let i in list) {
+          if (i > 19) return
           _getSongsDetail(list[i].id).then((res) => {
             let song = new songDetail(res.data.songs);
             this.musicList.push(song);

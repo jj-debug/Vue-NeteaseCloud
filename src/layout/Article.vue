@@ -1,5 +1,6 @@
 <template>
-  <div :class="articleClass">
+  <div :class="articleClass"
+    @scroll="handleScroll">
     <keep-alive>
       <router-view />
     </keep-alive>
@@ -70,6 +71,33 @@ export default {
     },
   },
   methods: {
+    handleScroll(e) {
+      let path = this.$route.path
+      console.log(e.target.scrollTop);
+      console.log(e.target.clientHeight);
+      console.log(e.target.scrollHeight);
+      var scrollTop = e.target.scrollTop
+      // 变量windowHeight是可视区的高度
+      var windowHeight = e.target.clientHeight
+      // 变量scrollHeight是滚动条的总高度
+      var scrollHeight = e.target.scrollHeight
+      // 触底判定
+      if (scrollTop + windowHeight >= scrollHeight) {
+        switch (path) {
+          case "/artist-detail":
+            this.$bus.$emit('artistDetailScroll')
+            break;
+          case "/new-songs":
+            this.$bus.$emit('newSongsScroll')
+            break;
+        
+          default:
+            break;
+        }
+      }
+      
+    },
+
     /**设置主题 */
     changeTheme(themeKey) {
       console.log(themeKey);

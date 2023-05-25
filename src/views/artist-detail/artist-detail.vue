@@ -1,7 +1,11 @@
 <template>
   <!-- <scroll class="scroll" ref="scroll" :disable-wheel="getIsWheel"> -->
-    <div :class="[`${program + 'artist-detail'}`, 'test']" ref="roll">
-      <div ref="rolls"></div>
+    <div :class="[`${program + 'artist-detail'}`, 'test']" 
+        ref="roll"
+        @scroll="() => {
+          console.log('test');
+          
+        }">
       <artist-baseinfo :artist="getArtist" :mv-count="getMvCount" />
       <b-menu
         :class="[`${program + 'artist-detail-menu'}`]"
@@ -10,6 +14,7 @@
         @click="handleMenuClick"
       ></b-menu>
       <album-list
+        ref="albumList"
         v-show="isShow === 'album'"
         :id="getArtistId"
         @enter="handleEnter"
@@ -63,24 +68,8 @@ export default {
       mvList: [],
     };
   },
-  mounted() {
-    this.artist = this.$route.query.artist;
-    console.log('this.$refs', this.$refs);
-    console.log('this.$refs.roll', this.$refs.roll);
-    console.log('this.$refs.rolls', this.$refs.rolls);
-    // console.log(document.querySelector('.test').scrollTop);
-    this.$refs.roll.addEventListener('scroll', () => {
-      
-        // 获取需要滚动的距离
-        var scrollTop = this.$refs.roll.scrollTop
-        // 变量windowHeight是可视区的高度
-        var windowHeight = this.$refs.roll.clientHeight
-        // 变量scrollHeight是滚动条的总高度
-        var scrollHeight = this.$refs.roll.scrollHeight
-        // 滚动条到底部的条件
-        console.log(scrollTop, windowHeight, scrollHeight);
-
-    })
+  created() {
+    this.artist = JSON.parse(this.$route.query.artist);
   },
   computed: {
     /**获取歌曲初始数据 */
@@ -89,7 +78,9 @@ export default {
     },
     /**获取歌手id */
     getArtistId() {
-      if (this.artist.id) return this.artist.id;
+      // console.log('this.artist', this.artist);
+      // console.log('this.artist.id', this.artist.id);
+      if (this.artist) return this.artist.id;
     },
     getIsWheel() {
       return this.isWheel;
@@ -100,6 +91,8 @@ export default {
   },
   methods: {
     handleMenuClick(index) {
+        console.log("this.artist", this.artist);
+        console.log("this.artist.id", this.artist.id);
       switch (index) {
         case 0:
           this.isShow = "album";
@@ -150,7 +143,9 @@ export default {
     /**路由变化数据置空 */
     $route() {
       if (this.$route.path.indexOf("artist-detail") > 0) {
-        this.artist = this.$route.query.artist;
+        this.artist = JSON.parse(this.$route.query.artist);
+        console.log("this.artist", this.artist);
+        console.log("this.artist.id", this.artist.id);
         this.reset();
         // this.initRequest();
       }

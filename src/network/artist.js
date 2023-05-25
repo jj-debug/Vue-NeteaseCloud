@@ -18,11 +18,13 @@ export function _getArtistHot50(id){
 }
 
 /**获取歌手专辑 */
-export function _getArtistAlbum(id){
+export function _getArtistAlbum(id, offset){
     return request({
         url:'/artist/album',
         params:{
-            id:id
+            id:id,
+            limit: 5,
+            offset
         }
     })
 }

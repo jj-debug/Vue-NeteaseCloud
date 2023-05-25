@@ -30,10 +30,19 @@ export default {
   data() {
     return {
       hotAlbums: [],
+      newHotAlbums: [], // 请求新的专辑数组需要封装成响应式的，这是一个媒介数组
+      offset: 1
     };
   },
   created() {
     this.initRequest();
+  },
+  mounted() {
+    this.$bus.$on("artistDetailScroll", () => {   // 获取需要滚动的距离
+      this.offset += 5
+      console.log(this.offset);
+      this.initRequest()
+    })
   },
   methods: {
     /**鼠标进入热门50首 */
@@ -54,9 +63,15 @@ export default {
     },
     /**artist-detail网络请求 */
     initRequest() {
-      _getArtistAlbum(this.id).then((res) => {
+      _getArtistAlbum(this.id, this.offset).then((res) => {
         /**热门专辑 */
-        this.hotAlbums = res.data.hotAlbums;
+        if (this.hotAlbums == []) {
+          this.hotAlbums = res.data.hotAlbums;
+        }else{
+          this.newHotAlbums = res.data.hotAlbums
+          this.hotAlbums.push(...this.newHotAlbums)
+        }
+        console.log(this.hotAlbums);
       });
     },
     /**重置数据 */

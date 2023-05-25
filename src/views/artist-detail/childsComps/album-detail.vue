@@ -42,6 +42,9 @@ export default {
       _getAlbum(this.album.id).then((res) => {
         let songs = res.data.songs;
         for (let i in songs) {
+          if (i > 3) {
+            return
+          }
           _getSongsDetail(songs[i].id).then((res) => {
             let song = new songDetail(res.data.songs);
             this.musicList.push(song);

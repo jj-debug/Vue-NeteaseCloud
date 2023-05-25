@@ -62,6 +62,7 @@ export default {
     },
     /**进入歌手详情页面 */
     enterArtistDetail(item) {
+      console.log(item);
       this.$router.push({
         path: "/artist-detail",
         query: {
@@ -70,7 +71,7 @@ export default {
           // musicSize: item.musicSize,
           // albumSize: item.albumSize,
           // picUrl: item.picUrl,
-          artist: item,
+          artist: JSON.stringify(item),
         },
       });
     },
