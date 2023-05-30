@@ -1,7 +1,7 @@
 <template>
   <div :class="headClass">
     <div :class="program + 'header-title'">
-      <div :class="program + 'header-title-left'" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+      <div :class="program + 'header-title-left'">
         <div class="item" @click="handleHomeButton">
           <transition name="header-side">
             <i class="iconfont icon-home" />
@@ -36,16 +36,16 @@
       <div class="right">
 
 
-        <el-dropdown :disabled="isCookie">
+        <el-dropdown :disabled="!isLogin">
           <span class="el-dropdown-link">
-            <b-avatar size="35px" class="avatar" :src="getAvatar" @click.native="handleAvatarClick" />
+            <b-avatar size="35px" class="avatar" :src="isAvatar" @click.native="handleAvatarClick" />
             <div class="nickname">
               <span v-if="getNickname">{{ getNickname }}</span>
               <i v-if="getNickname" class="el-icon-arrow-down el-icon--right"></i>
             </div>
 
           </span>
-          <el-dropdown-menu slot="dropdown">
+          <el-dropdown-menu slot="dropdown" ref="elDropdownMenu">
             <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -81,7 +81,7 @@
       </div>
     </div>
     <transition name="login">
-      <login v-show="isLogin" class="login" />
+      <login v-show="isShow" class="login" />
     </transition>
   </div>
 </template>
@@ -100,9 +100,12 @@ export default {
     return {
       isShow: false,
       isLogin: false,
-      isCookie: this.disable
-
+      isAvatar: localStorage.getItem('cookie')? this.isAvatar = this.getAvatar: this.isAvatar = ''
     };
+  },
+  beforeUpdate() {
+    console.log("this.isShow", this.isShow);
+    console.log("this.isLogin", this.isLogin);
   },
   computed: {
     haveCookie() {
@@ -124,12 +127,6 @@ export default {
     
   },
   methods: {
-    handleMouseEnter() {
-      this.isShow = true;
-    },
-    handleMouseLeave() {
-      this.isShow = false;
-    },
     /**主题 */
     handleThemeLight() {
       this.$store.commit("setTheme", "light");
@@ -141,12 +138,16 @@ export default {
       this.$store.commit("setTheme", "green");
     },
     handleAvatarClick() {
-      if (!this.disable) return
+      console.log(this.haveCookie);
+      if (localStorage.getItem('cookie')) return
       this.$bus.$emit('erweima')
-      this.isLogin = true;
+      this.isShow = true;
     },
-    hiddleLogin() {
-      this.isLogin = false;
+    hiddleLogin(boolean) {
+      console.log(boolean);
+      // this.isLogin = boolean;
+      this.isShow = false
+      console.log("this.isShow", this.isShow);
     },
     /**窗口 */
     handleMaxScreen() {
@@ -168,18 +169,31 @@ export default {
     async logout() {
       console.log(this.nickname);
       this.$store.commit("deleteUser");
+      this.isLogin = !this.isLogin
       localStorage.removeItem('cookie');
       localStorage.removeItem('avatar');
       localStorage.removeItem('uid')
       localStorage.removeItem('playList')
       localStorage.removeItem('nickname')
-      getNickname()
-      getAvatar()
+      localStorage.getItem('cookie')? this.isAvatar = this.getAvatar: this.isAvatar = ''
       this.$router.push({
         path: '/individuation'
       })
     }
   },
+  mounted() {
+    
+    localStorage.getItem('cookie')? this.isLogin = true : this.isLogin = false
+    localStorage.getItem('cookie')? this.isAvatar = this.getAvatar: this.isAvatar = ''
+    this.$bus.$on('successLogin', () => {
+      console.log('successLogin');
+      this.isLogin = true
+      localStorage.getItem('cookie')? this.isAvatar = this.getAvatar: this.isAvatar = ''
+    })
+    this.$bus.$on('noLogin', () => {
+      this.isLogin = false
+    })
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -279,6 +293,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+        color: #444;
       }
 
       a {

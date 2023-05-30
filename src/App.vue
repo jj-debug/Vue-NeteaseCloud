@@ -29,5 +29,6 @@ export default {
   height: 100vh;
   overflow: hidden;
   position: relative;
+  min-width: 1200px;
 }
 </style>

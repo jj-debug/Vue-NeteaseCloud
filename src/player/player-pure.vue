@@ -104,6 +104,14 @@ export default {
       return (this.offset - 1) * this.limit;
     },
   },
+  mounted() {
+    this.$bus.$on("audioPause", () => {
+      document.querySelector(".player-pure-pic").style.animationPlayState = 'paused'
+    })
+    this.$bus.$on("audioPlay", () => {
+      document.querySelector(".player-pure-pic").style.animationPlayState = 'running'
+    })
+  },
   methods: {
     /**分页 */
     onPageChange() {

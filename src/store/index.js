@@ -57,7 +57,7 @@ export default new Vuex.Store({
       return state.theme;
     },
     getAvatar(state){
-      let avatar='';
+      let avatar='../assets/img/one.jpg';
       if(localStorage.getItem('avatar')){
         avatar=localStorage.getItem('avatar');
         return avatar;

@@ -257,10 +257,13 @@ export default {
     /**暂停或播放音乐 */
     toggle() {
       this.isPlay = !this.isPlay;
-      if (this.isPlay && this.$refs.audio.readyState == 4)
+      if (this.isPlay && this.$refs.audio.readyState == 4){
         this.$refs.audio.play();
+        this.$bus.$emit("audioPlay")
+      }
       else {
         this.$refs.audio.pause();
+        this.$bus.$emit("audioPause")
       }
     },
     /**返回当前的播放时间 */

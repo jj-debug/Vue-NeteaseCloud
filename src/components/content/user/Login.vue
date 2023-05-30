@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="back">
-      <div class="x" @click="hiddenLogin">
+      <div class="x" @click="hiddenLogin(false)">
         <i class="vbestui-iconfont icon-close"></i>
       </div>
       <!-- <div class="son">
@@ -54,38 +54,33 @@ export default {
     // 创建二维码并监听
     async erweima() {
       let nowtime = Date.now();
-      let key = await _getKey(nowtime);
+      let key = await _getKey(nowtime); // 携带时间戳请求唯一key值
       key = key.data.data.unikey
-      this.pic = await _getTCode(key)
+      this.pic = await _getTCode(key) // 携带key值请求二维码
       this.pic = this.pic.data.data.qrimg
-
-      let check = setInterval(async () => {
+      let check = setInterval(async () => { // 开启定时器轮询二维码状态
         let nowtime2 = new Date().getTime();
-        let res = await _checkTCode(key, nowtime2).then()
+        let res = await _checkTCode(key, nowtime2)
         console.log(res.data.message, '---')
-
         this.loginStatus = res.data.message;
         if (res.data.code == 800) {
-          alert(res.data.message)
+          this.$Toast.success(res.data.message)
           clearInterval(check)
         }
         if (res.data.code == 803) {
-          alert('登录成功')
-          // this.$Toast.success('登录成功')
+          this.$Toast.success('登录成功')
           clearInterval(check)
           let status = await _getLoginStatus(res.data.cookie, new Date())
           console.log('status', status);
           let uid = status.data.data.account.id
           let detail = await _getUserDetail(uid)
-          console.log("detail", detail);
-
           this.$store.commit("addUser", detail.data);
           localStorage.setItem('cookie', res.data.cookie);
           localStorage.setItem('avatar', detail.data.profile.avatarUrl);
           localStorage.setItem('nickname', detail.data.profile.nickname);
           localStorage.setItem('uid', detail.data.profile.userId)
-
-          this.hiddenLogin()
+          this.hiddenLogin(true)
+          this.$bus.$emit('successLogin')
         }
       }, 1000)
 
@@ -133,11 +128,13 @@ export default {
         });
       }
     },
-    hiddenLogin() {
+    hiddenLogin(boolean) {
       for (let i = 1; i < 1000; i++) {
         clearInterval(i);
       }
-      this.$parent.hiddleLogin();
+      this.$parent.hiddleLogin(boolean);
+      
+      this.$bus.$emit('noLogin')
     }
   },
 };

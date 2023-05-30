@@ -71,31 +71,47 @@ export default {
     },
   },
   methods: {
+    // 防抖
+    debounce(fn, time) {
+      let temp = null;
+
+      return function() {
+        if(temp != null){
+          clearInterval(temp)
+        }
+        temp = setTimeout(() => {
+          console.log("debounce");
+          fn.call(this)
+        }, time)
+      }
+    },
+    scroll(){
+      // console.log(this.debounce(this.handleScroll, 500));
+      this.debounce(this.handleScroll, 500)
+    },
     handleScroll(e) {
       let path = this.$route.path
-      console.log(e.target.scrollTop);
-      console.log(e.target.clientHeight);
-      console.log(e.target.scrollHeight);
+      let pathArr = path.split('/')
       var scrollTop = e.target.scrollTop
       // 变量windowHeight是可视区的高度
       var windowHeight = e.target.clientHeight
       // 变量scrollHeight是滚动条的总高度
       var scrollHeight = e.target.scrollHeight
+      console.log(scrollTop, windowHeight, scrollHeight);
       // 触底判定
-      if (scrollTop + windowHeight >= scrollHeight) {
-        switch (path) {
-          case "/artist-detail":
+      if (scrollTop + windowHeight >= scrollHeight - 1) {
+        switch (pathArr[1]) {
+          case "artist-detail":
             this.$bus.$emit('artistDetailScroll')
             break;
-          case "/new-songs":
+          case "new-songs":
             this.$bus.$emit('newSongsScroll')
             break;
-        
-          default:
+          case "musiclistdetail":
+            this.$bus.$emit('musicListDetailScroll')
             break;
         }
       }
-      
     },
 
     /**设置主题 */

@@ -38,7 +38,7 @@
           标签：
           <span>{{getTags}}</span>
         </p>
-        <p class="desc-title">简介：{{baseInfo.title}}}}</p>
+        <p class="desc-title">简介：{{baseInfo.title}}</p>
       </div>
     </div>
     <div class="play">

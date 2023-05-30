@@ -1,4 +1,15 @@
-import { Carousel, CarouselItem ,Pagination, Dropdown, DropdownMenu, DropdownItem} from 'element-ui'
+import { Carousel, 
+    CarouselItem,
+    Pagination, 
+    Dropdown, 
+    DropdownMenu, 
+    DropdownItem,
+    Menu,
+    Submenu,
+    MenuItem,
+    RadioGroup,
+    RadioButton,
+} from 'element-ui'
 
 const components = [
     Carousel,
@@ -6,7 +17,12 @@ const components = [
     Pagination,
     Dropdown, 
     DropdownMenu,
-    DropdownItem
+    DropdownItem,
+    Menu,
+    Submenu,
+    MenuItem,
+    RadioGroup,
+    RadioButton,
 ];
 
 export default {

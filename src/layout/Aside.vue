@@ -9,12 +9,33 @@
         :text-color="theme == 'dark' ? 'var(--dark-text-color)' : ''"
         :active-color="getActiveColor"
       ></b-menu>
+      
+      <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
+        <el-radio-button :label="false">展开</el-radio-button>
+        <el-radio-button :label="true">收起</el-radio-button>
+      </el-radio-group>
+      <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+        
+        <el-menu-item index="2">
+          <i class="el-icon-menu"></i>
+          <span slot="title">导航二</span>
+        </el-menu-item>
+        <el-menu-item index="3" disabled>
+          <i class="el-icon-document"></i>
+          <span slot="title">导航三</span>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <i class="el-icon-setting"></i>
+          <span slot="title">导航四</span>
+        </el-menu-item>
+      </el-menu> -->
+
       <div class="my-music-list" @mouseenter="handleRefresh" v-if="playList.length">
         <p class="title">创建的歌单</p>
         <scroll class="aside-scroll" ref="scroll">
           <ul class="my-music-list-main">
             <li v-for="(item, index) in playList" :key="index" @click="enterMusicListDetail(index)">
-              <img :src="item.cover" alt="" width="25.6px" height="25.6px"/>
+              <img :src="item.cover" alt="" style="width: 25.6px;height: 25.6px;"/>
               <div class="my-music-list-main-name">{{ item.name }}</div>
             </li>
           </ul>
@@ -34,6 +55,7 @@ export default {
   components: { Scroll },
   data() {
     return {
+      isCollapse: true,
       menuList: [
         {
           link: "/individuation",
@@ -74,6 +96,12 @@ export default {
     },
   },
   methods: {
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
     getPriPlayList() {
       this.playList=[];
       _getSongList(this.getUserId).then((res) => {
@@ -109,6 +137,10 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  min-height: 400px;
+}
 .dance-music-aside {
   height: calc(100% - 58px - 60px);
   width: 18%;

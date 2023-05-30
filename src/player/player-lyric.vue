@@ -112,7 +112,6 @@ export default {
               this.lyricIndex > this.lyricArray.length - this.scrollNum
             )
               return;
-
             /**拖动进度条小球时不能自动滚动 */
             if (!this.isDarg) {
               this.$refs.scroll.scrollTo(

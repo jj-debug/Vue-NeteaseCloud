@@ -6,6 +6,7 @@
         :class="['text-area', `${'text-area-' + theme}`]"
         @keydown.enter="pushCommend()"
         v-model="content"
+        style="resize: none;"
       ></textarea>
       <p>
         <b-button

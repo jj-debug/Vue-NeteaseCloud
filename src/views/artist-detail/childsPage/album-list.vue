@@ -31,17 +31,16 @@ export default {
     return {
       hotAlbums: [],
       newHotAlbums: [], // 请求新的专辑数组需要封装成响应式的，这是一个媒介数组
-      offset: 1
+      offset: 0
     };
   },
   created() {
-    this.initRequest();
+    // this.initRequest();
   },
   mounted() {
     this.$bus.$on("artistDetailScroll", () => {   // 获取需要滚动的距离
-      this.offset += 5
-      console.log(this.offset);
       this.initRequest()
+      this.offset += 5
     })
   },
   methods: {
@@ -72,6 +71,10 @@ export default {
           this.hotAlbums.push(...this.newHotAlbums)
         }
         console.log(this.hotAlbums);
+        let len = this.hotAlbums.length
+        for(let i = 0; i < len; i++){
+          console.log(this.hotAlbums[i].id);
+        }
       });
     },
     /**重置数据 */
@@ -83,7 +86,9 @@ export default {
     id(){
       this.reset();
       this.initRequest();
+      this.offset = 0
     }
+
   }
 };
 </script>
