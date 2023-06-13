@@ -1,13 +1,15 @@
 import axios from 'axios'
 import $store from '@/store/index'
-
-const baseURL="http://localhost:3000";
+// import 
+// const baseURL="http://localhost:3000";
+const baseURL=process.env.VUE_APP_NODE_URL;
 // const baseURL="http://59.110.124.156:3000";
 // const baseURL="http://123.56.175.108:3000"
 
 let ajaxTimer = 0;
 export function request(config) {
     $store.commit('showLoading');
+    console.log(baseURL);
     const install = axios.create({
         baseURL,
         timeOut: 2000

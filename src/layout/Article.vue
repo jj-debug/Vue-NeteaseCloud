@@ -1,9 +1,9 @@
 <template>
   <div :class="articleClass"
     @scroll="handleScroll">
-    <keep-alive>
+    <!-- <keep-alive>  -->
       <router-view />
-    </keep-alive>
+    <!-- </keep-alive> -->
     <b-loading
       icon="vbestui-iconfont icon-loading2"
       size="large"
